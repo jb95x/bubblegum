@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BubbleGum</title>
+</head>
+
+<body background="image/background.jpg">
+    <div style="padding: 0px; position: fixed; z-index: 3">
+        <div onClick="showGlobalSettings()" style="cursor: pointer; margin: 0px; background: rgba(0,0,0,0.8); display: inline-block; box-shadow: 0 0 1em purple; padding: 10px; vertical-align: top">
+            <a>⚙️</a>
+        </div>
+        <div id="globalsettings" style="margin: 0px; background: rgba(0,0,0,0.8); box-shadow: 0 0 1em purple; padding: 10px;">
+            <h6><b><font id="pingviewer">Ping: 0ms | Users: 0 | Rooms: 0</font></b></h6>
+            <p class="range-field browser-default">
+                <label for="volumebar">Volume</label>
+                <input class="browser-default" type="range" onchange="onVolumeChange()" value="100" id="volumebar" min="0" max="100" />
+            </p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <center>
+                    <font style="text-shadow: 0 0 2em purple">
+                        <h1><b>🍬 BubbleGum</b></h1>
+                    </font>
+                </center>
+                <div class="col s12 m12 l5">
+                    <div class="card-panel z-depth-5" style="box-shadow: 0px 0px 2em purple">
+                        <div class="card-tabs">
+                            <ul class="tabs tabs-fixed-width">
+                                <li class="tab"><a class="active" href="#connectpanel">Connect</a></li>
+                                <li class="tab"><a href="#scorepanel">Scores</a></li>
+                                <li class="tab"><a href="#roompanel">Room</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-content">
+                            <div id="connectpanel">
+                                <h5><b>User</b></h5>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix"><input style="height: 35px; width: 35px" id="usercolor" type="color"></i>
+                                        <input type="text" id="username" onkeypress="onUpdateUser(event)">
+                                        <label for="username">Username</label>
+                                    </div>
+                                    <div class="right">
+                                        <a onClick="updateUser()" class="waves-effect waves-light btn">Set</a>
+                                    </div>
+                                </div>
+                                <h5><b>Room</b></h5>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">gamepad</i>
+                                        <input type="text" id="room" onkeypress="onEnterRoom(event)">
+                                        <label for="room">Join/Create</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">lock_outline</i>
+                                        <input type="password" id="password" class="validate" onkeypress="onEnterRoom(event)">
+                                        <label for="password">Password (Optional)</label>
+                                    </div>
+                                    <div class="right">
+                                        <a onClick="enterRoom()" class="waves-effect waves-light btn">Connect</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="scorepanel">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Points</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="scoreboard">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="roompanel">
+                                <div class="row">
+                                    <h5><b>New Game Settings</b></h5>
+                                    <div class="input-field col s12">
+                                        <select id="tablesize">
+                                                <option value="3">3x3</option>
+                                                <option value="5">5x5</option>
+                                                <option value="7">7x7</option>
+                                                <option value="9">9x9</option>
+                                            </select>
+                                        <label>Grid Size</label>
+                                    </div>
+                                    <h5><b>Chat</b></h5>
+                                    <div class="input-field col s12" id="chatbox" style="height: 30vh; overflow: auto;" disabled>Welcome to BubbleGum!</div>
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">send</i>
+                                        <input type="text" id="chatinput" onkeypress="onEnterMessage(event)">
+                                        <label for="chatinput">Type a message</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m12 l7">
+                    <div class="card-panel z-depth-5" style="box-shadow: 0px 0px 2em purple">
+                        <center>
+                            <h5><b><span id="roomname"></span></b></h5>
+                            <div id="board"></div>
+                            </br>
+                            <b><a onClick="startGame()" id ="startbutton" width="100%" class="waves-effect waves-light btn-large z-depth-5">START</a></b>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel z-depth-5" style="box-shadow: 0px 0px 2em purple">
+                    <h5><b>Public Rooms</b></h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Room Name</th>
+                                <th>Players</th>
+                                <th>Join</th>
+                            </tr>
+                        </thead>
+                        <tbody id="publicrooms">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="grey darken-4 page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    <h5 class="white-text">How to play</h5>
+                    <ol>
+                        <li>Choose a Username</li>
+                        <li>Insert the Room name that your friends gave or choose one to create a new room</li>
+                        <li>Insert a password (Optional)</li>
+                        <li>If you didn't insert a password the room will appear in "Public Rooms" above.</li>
+                        <li>You can choose the game grid size on the room tab</li>
+                        <li>The objective of the game is to click more circles than your friends</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="black footer-copyright">
+            <div class="container">
+                The sounds used are from <a href="https://freesound.org/people/GameAudio/packs/13940/">here</a>.
+                This Game is built on top of <a href="https://socket.io/">Socket.IO</a> and the interface was built using
+                <a href="http://materializecss.com/">Materialize.</a>
+            </div>
+        </div>
+    </footer>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="js/game.js"></script>
+    <script type="text/javascript" src="js/chat.js"></script>
+    <script type="text/javascript" src="js/scoreboard.js"></script>
+    <script type="text/javascript" src="js/publicrooms.js"></script>
+    <script type="text/javascript" src="js/socket.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/misc.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+
+</html>

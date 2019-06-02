@@ -1,0 +1,5 @@
+//Easy win easy life
+c.addEventListener('mousemove', onClick);
+
+//Replace %d with a number between 1-16 to start a game with that size
+socket.emit('startGame', %d);
